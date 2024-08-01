@@ -1,0 +1,4 @@
+/home/zhy/project/dg270Test/build/CMakeFiles/rebuild_cache.dir
+/home/zhy/project/dg270Test/build/CMakeFiles/edit_cache.dir
+/home/zhy/project/dg270Test/build/CMakeFiles/hScanDetect.dir
+/home/zhy/project/dg270Test/build/CMakeFiles/hScanDetect_autogen.dir

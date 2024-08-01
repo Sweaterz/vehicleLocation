@@ -1,0 +1,479 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "hScanDetect"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"target_link_libraries",
+			"include_directories",
+			"target_include_directories"
+		],
+		"files" : 
+		[
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 18,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 20,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 22,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 14,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 16,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 21,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g  "
+				},
+				{
+					"backtrace" : 2,
+					"fragment" : "-fPIC"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 2,
+					"define" : "QT_CORE_LIB"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"path" : "/home/zhy/project/dg270Test/build"
+				},
+				{
+					"path" : "/home/zhy/project/dg270Test"
+				},
+				{
+					"backtrace" : 0,
+					"path" : "/home/zhy/project/dg270Test/build/hScanDetect_autogen/include"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/opt/opencv454/include/opencv4"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/usr/include/eigen3"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_calib3d"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_core"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_dnn"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_features2d"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_flann"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_gapi"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_highgui"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_imgcodecs"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_imgproc"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_ml"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_objdetect"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_photo"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_stitching"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_video"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_videoio"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_alphamat"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_aruco"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_barcode"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_bgsegm"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_bioinspired"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_ccalib"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_cudaarithm"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_cudabgsegm"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_cudacodec"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_cudafeatures2d"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_cudafilters"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_cudaimgproc"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_cudalegacy"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_cudaobjdetect"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_cudaoptflow"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_cudastereo"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_cudawarping"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_cudev"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_datasets"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_dnn_objdetect"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_dnn_superres"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_dpm"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_face"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_freetype"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_fuzzy"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_hdf"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_hfs"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_img_hash"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_intensity_transform"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_line_descriptor"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_mcc"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_optflow"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_phase_unwrapping"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_plot"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_quality"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_rapid"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_reg"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_rgbd"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_saliency"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_shape"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_stereo"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_structured_light"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_superres"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_surface_matching"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_text"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_tracking"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_videostab"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_wechat_qrcode"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_xfeatures2d"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_ximgproc"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_xobjdetect"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/home/zhy/project/dg270Test/opencv_xphoto"
+				},
+				{
+					"backtrace" : 6,
+					"isSystem" : true,
+					"path" : "/usr/include/python3.8"
+				},
+				{
+					"backtrace" : 6,
+					"isSystem" : true,
+					"path" : "/usr/lib/python3/dist-packages/numpy/core/include"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/usr/include/x86_64-linux-gnu/qt5"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/usr/include/x86_64-linux-gnu/qt5/QtCore"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				0,
+				1
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 0,
+			"id" : "hScanDetect_autogen::@6890427a1f51a3e7e1df"
+		}
+	],
+	"id" : "hScanDetect::@6890427a1f51a3e7e1df",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-g",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-rdynamic",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libQt5Core.so.5.12.8",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libpython3.8.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lpthread",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "hScanDetect",
+	"nameOnDisk" : "hScanDetect",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 0,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "build/hScanDetect_autogen/mocs_compilation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "main.cpp",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "EXECUTABLE"
+}
