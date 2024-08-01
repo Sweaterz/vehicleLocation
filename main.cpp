@@ -585,8 +585,9 @@ void processScanData(std::vector<float>&x, std::vector<float>&y){
             frontPoints.push_back(cv::Point2f(filtered_x[i], filtered_y[i]));
         }
     }
+
     cv::Vec4f leftLineParam, frontLineParam;
-    vector<float> leftLineX, leftLineY, frontLineX, frontLineY;
+    std::vector<float> leftLineX, leftLineY, frontLineX, frontLineY;
 
     fitLineRansac(leftPoints, leftLineParam, 2000, 10);
     double k = leftLineParam[1] / leftLineParam[0];
@@ -597,6 +598,8 @@ void processScanData(std::vector<float>&x, std::vector<float>&y){
     leftLineY.push_back(b);
     leftLineY.push_back(k*filtered_x[cornerIndex]+b);
     std::cout<<"ransac_left: "<<k<<" "<<b<<" "<<leftAngle<<std::endl;
+    
+    
     fitLineRansac(frontPoints, frontLineParam, 2000, 10);
     k = frontLineParam[1] / frontLineParam[0];
     b = frontLineParam[3] - k*frontLineParam[2];
