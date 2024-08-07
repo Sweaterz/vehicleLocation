@@ -1,5 +1,8 @@
 ﻿#include "matplotlibcpp.h"
 #include <QCoreApplication>
+#include <QApplication>
+#include <QWidget>
+
 #include <iostream>
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -47,7 +50,7 @@ std::vector<size_t> sort_indexes(std::vector<T> &v)
     std::vector<size_t> idx(v.size());
     iota(idx.begin(), idx.end(), 0);
     sort(idx.begin(), idx.end(),
-        [&v](size_t i1, size_t i2) {return v[i1] < v[i2]; });//这样是升序，改成>就是降序了
+         [&v](size_t i1, size_t i2) {return v[i1] < v[i2]; });//这样是升序，改成>就是降序了
     return idx;
 }
 
@@ -117,7 +120,7 @@ void myPlt(std::vector<float>x, std::vector<float>y, std::string title, int proc
         return;
     }
 
-//    plt::figure();
+    //    plt::figure();
 
     plt::scatter(x, y);
     plt::title(title);
@@ -125,7 +128,7 @@ void myPlt(std::vector<float>x, std::vector<float>y, std::string title, int proc
 
     plt::plot();
     if(process == 1){
-       plt::show();
+        plt::show();
     }
 
 
@@ -152,7 +155,7 @@ void parseHorizontalScanData(std::vector<std::string> &hex_data, int &scan_idx)
         if(hexSize != 1206 || hex_data[0] != "FF" || hex_data[1] != "EE"){return;}
         int firstStartAngle = int32_t(std::stoi(hex_data[3], 0, 16) * 0x100 + std::stoi(hex_data[2], 0, 16)) / 100;
         uint64_t timestamp = int32_t(std::stoi(hex_data[hexSize - 3], 0, 16)) * 256 * 256 * 256 + int32_t(std::stoi(hex_data[hexSize - 2], 0, 16)) * 256 * 256
-                + int32_t(std::stoi(hex_data[hexSize - 4], 0, 16)) * 256 + int32_t(std::stoi(hex_data[hexSize - 3], 0, 16));
+                             + int32_t(std::stoi(hex_data[hexSize - 4], 0, 16)) * 256 + int32_t(std::stoi(hex_data[hexSize - 3], 0, 16));
 
         for (int i=0; i<12; i=i+1) {
             int startIdx = i * 100;
@@ -167,18 +170,18 @@ void parseHorizontalScanData(std::vector<std::string> &hex_data, int &scan_idx)
                 float angle = startAngle + 0.25 * idx;
                 float iHorizontalAngle = 180;
                 float angle_, h, l;
-//                if (angle < iHorizontalAngle) {
-//                    angle_ = iHorizontalAngle - angle;
-//                    h = uint(sin(angle_ * M_PI / 180) * distance);
-//                    l = uint(cos(abs(angle_ * M_PI / 180)) * distance);
-//                } else if (angle > iHorizontalAngle) {
-//                    angle_ = angle - iHorizontalAngle;
-//                    h = - uint(sin(angle_ * M_PI / 180) * distance);
-//                    l = uint(cos(abs(angle_ * M_PI / 180)) * distance);
-//                } else {
-//                    h = 0;
-//                    l = distance;
-//                }
+                //                if (angle < iHorizontalAngle) {
+                //                    angle_ = iHorizontalAngle - angle;
+                //                    h = uint(sin(angle_ * M_PI / 180) * distance);
+                //                    l = uint(cos(abs(angle_ * M_PI / 180)) * distance);
+                //                } else if (angle > iHorizontalAngle) {
+                //                    angle_ = angle - iHorizontalAngle;
+                //                    h = - uint(sin(angle_ * M_PI / 180) * distance);
+                //                    l = uint(cos(abs(angle_ * M_PI / 180)) * distance);
+                //                } else {
+                //                    h = 0;
+                //                    l = distance;
+                //                }
 
 
                 h = sin(angle * M_PI / 180) * distance;
@@ -195,13 +198,13 @@ void parseHorizontalScanData(std::vector<std::string> &hex_data, int &scan_idx)
             std::cout << "xData.size():" << xData.size() << " yData.size():" << yData.size() << std::endl;
             // 帧数据处理函数
             for(size_t i = 0; i < xData.size(); i++) {
-                   x[i] = xData[i];
-                   y[i] = yData[i];
-               }
+                x[i] = xData[i];
+                y[i] = yData[i];
+            }
 
-//            if(scan_idx == PROCESSIDX){
-//                processScanData(x, y);
-//            }
+            //            if(scan_idx == PROCESSIDX){
+            //                processScanData(x, y);
+            //            }
             processScanData(x, y);
 
 
@@ -237,7 +240,7 @@ int readOfflineDatByBin(std::string& path){
             hex_str.push_back(str_hex);
         }
         if(hex_str.size() > 0){
-//            std::cout<<"scanData Size: "<<hex_str.size()<<std::endl;
+            //            std::cout<<"scanData Size: "<<hex_str.size()<<std::endl;
             parseHorizontalScanData(hex_str, scan_idx);
         }
     }
@@ -315,7 +318,7 @@ int getUDPData()
         socklen_t nAddrLen = sizeof(struct sockaddr_in);
         int receiveSize = 0;
         receiveSize = recvfrom(sockfd, recData, 1460, MSG_DONTWAIT, (sockaddr *)&g_remoteAddr, &nAddrLen);
-//       std::cout << "receiveSize:" << receiveSize << std::endl;
+        //       std::cout << "receiveSize:" << receiveSize << std::endl;
         if (receiveSize > 6)
         {
             free_flag = 0;
@@ -338,9 +341,9 @@ int getUDPData()
                 parseHorizontalScanData(hex_str, scan_idx);
             }
         }
-   }
-   close(sockfd);
-   return 1;
+    }
+    close(sockfd);
+    return 1;
 }
 
 void splitByX(std::vector<float>&x, float xThreshold, std::vector<std::vector<float>>& dstX, int orderNum=1){
@@ -364,8 +367,8 @@ void splitByX(std::vector<float>&x, float xThreshold, std::vector<std::vector<fl
             endIdx = idxV[j];
         }
         else if(j == idxV.size()){
-           startIdx = idxV[j - 1];
-//           last = 1;
+            startIdx = idxV[j - 1];
+            //           last = 1;
         }
         else {
             startIdx = idxV[j-1];
@@ -530,13 +533,13 @@ void processScanData(std::vector<float>&x, std::vector<float>&y){
         std::cout<<"ransac_p1: "<<k<<" "<<b<<" "<<atan(k) / 3.1415926 * 360<<std::endl;
     }
     {
-//        cv::Vec4f lineParam;
-//        cv::fitLine(points1,lineParam,cv::DIST_L1,0,0.01,0.01);
-//        double k = lineParam[1] / lineParam[0];
-//        double b = lineParam[3] - k*lineParam[2];
-//        std::cout<<k<<" "<<b<<" "<<atan(k) / 3.1415926 * 360<<std::endl;
-//        auto k = linearRegression(x1, y1);
-//        std::cout<<"my_p1: "<<k<<" "<<atan(k) / 3.1415926 * 360<<std::endl;
+        //        cv::Vec4f lineParam;
+        //        cv::fitLine(points1,lineParam,cv::DIST_L1,0,0.01,0.01);
+        //        double k = lineParam[1] / lineParam[0];
+        //        double b = lineParam[3] - k*lineParam[2];
+        //        std::cout<<k<<" "<<b<<" "<<atan(k) / 3.1415926 * 360<<std::endl;
+        //        auto k = linearRegression(x1, y1);
+        //        std::cout<<"my_p1: "<<k<<" "<<atan(k) / 3.1415926 * 360<<std::endl;
 
 
     }
@@ -550,16 +553,16 @@ void processScanData(std::vector<float>&x, std::vector<float>&y){
         std::cout<<"ransac_p2: "<<k<<" "<<b<<" "<<atan(k) / 3.1415926 * 360<<std::endl;
     }
     {
-//        cv::Vec4f lineParam;
-//        cv::fitLine(points2,lineParam,cv::DIST_L2,0,0.01,0.01);
-//        double k = lineParam[1] / lineParam[0];
-//        double b = lineParam[3] - k*lineParam[2];
-//        std::cout<<k<<" "<<b<<" "<<" "<<atan(k) / 3.1415926 * 360<<std::endl;
-//        auto k = linearRegression(x2, y2);
-//        std::cout<<"my_p2: "<<k<<" "<<atan(k) / 3.1415926 * 360<<std::endl;
+        //        cv::Vec4f lineParam;
+        //        cv::fitLine(points2,lineParam,cv::DIST_L2,0,0.01,0.01);
+        //        double k = lineParam[1] / lineParam[0];
+        //        double b = lineParam[3] - k*lineParam[2];
+        //        std::cout<<k<<" "<<b<<" "<<" "<<atan(k) / 3.1415926 * 360<<std::endl;
+        //        auto k = linearRegression(x2, y2);
+        //        std::cout<<"my_p2: "<<k<<" "<<atan(k) / 3.1415926 * 360<<std::endl;
     }
 
-//     myPlt(x, y, "Horizontal laser orignal data");
+    //     myPlt(x, y, "Horizontal laser orignal data");
 
 
 
@@ -592,21 +595,27 @@ void processScanData(std::vector<float>&x, std::vector<float>&y){
     double k = leftLineParam[1] / leftLineParam[0];
     double b = leftLineParam[3] - k*leftLineParam[2];
     double leftAngle = atan(k) / 3.1415926 * 180;
-    leftLineX.push_back(0);
+    leftLineX.push_back(filtered_x[0]);
     leftLineX.push_back(filtered_x[cornerIndex]);
-    leftLineY.push_back(b);
-    leftLineY.push_back(k*filtered_x[cornerIndex]+b);
+    leftLineY.push_back(filtered_y[0]);
+    leftLineY.push_back(filtered_y[cornerIndex]);
     std::cout<<"ransac_left: "<<k<<" "<<b<<" "<<leftAngle<<std::endl;
     fitLineRansac(frontPoints, frontLineParam, 2000, 10);
     k = frontLineParam[1] / frontLineParam[0];
     b = frontLineParam[3] - k*frontLineParam[2];
     double frontAngle = atan(k) / 3.1415926 * 180;
+    frontLineX.push_back(0);
+    frontLineX.push_back(filtered_x[cornerIndex]);
+    frontLineY.push_back(b);
+    frontLineY.push_back(k*filtered_x[cornerIndex]+b);
     std::cout<<"ransac_front: "<<k<<" "<<b<<" "<<frontAngle<<std::endl;
 
     std::cout<< "The difference between the left and front angles is: " <<fabs(leftAngle - frontAngle) << std::endl;
 
-    plt::plot(leftLineX, leftLineY, {{"color", "red"}});
-    plt::scatter(corners_x, corners_y, 1000, {{"color", "green"}, {"marker", "o"}, {"alpha", "0.5"}});
+    plt::plot(leftLineX, leftLineY, {{"color", "orange"}});
+    plt::scatter(corners_x, corners_y, 100, { {"color", "red"}, {"marker", "o"} }); // 画出角点
+    plt::plot(frontLineX, frontLineY, {{"color", "yellow"}});
+    // plt::scatter(corners_x, corners_y, 1000, {{"color", "green"}, {"marker", "o"}, {"alpha", "0.5"}});
 
     // plt::scatter(x_, y_, 100, {{"color", "red"}, {"marker", "o"}, {"linestyle", "--"}});
     // plt::pause(0.1);
@@ -738,12 +747,32 @@ std::vector<int> find_corners(const std::vector<float>& x, const std::vector<flo
     return corners;
 }
 
+// 取角点附近的点，精确度更高
+int getFromCorners(const std::vector<float>& xData, const std::vector<float>& yData, std::vector<float>& nearCornerX, std::vector<float>& nearCornerY, int cornerIndex)
+{
+    int nearParam = 50; // 50 is the parameter controling about getting points range.
+    if(cornerIndex - nearParam < 0 || cornerIndex + nearParam >= xData.size())
+    {
+        std::cerr << "There is no enough points near the corner point. Now param is " << nearParam << ", please check it." << std::endl;
+        return 0;
+    }
+    else
+    {
+        for(int i = cornerIndex-50; i < cornerIndex + 50; i++)
+        {
+            nearCornerX.push_back(xData[i]);
+            nearCornerY.push_back(yData[i]);
+        }
+        return 1;
+    }
+}
+
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
+    QApplication a(argc, argv);
     std::string path = "/home/zhy/文档/270mini数据/20240416135731.dat";  //7/8/9  19 22 23
-//    int ret = readofflineDatByHex(path);
+    //    int ret = readofflineDatByHex(path);
     getUDPData();
 
     return a.exec();
