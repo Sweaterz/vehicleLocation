@@ -37,12 +37,14 @@ using namespace Eigen;
 #define PROCESSIDX 28
 namespace plt = matplotlibcpp;
 std::vector<float> xData, yData;
+std::vector<int> find_corners(const std::vector<float>& x, const std::vector<float>& y);
 
 void filterPoints(const std::vector<float>& xData, const std::vector<float>& yData, std::vector<float>& filteredX, std::vector<float>& filteredY, float threshold);
 void filterEdgePoints(const std::vector<float>& xData, const std::vector<float>& yData, std::vector<float>& filteredX, std::vector<float>& filteredY, size_t removeFront, size_t removeBack);
 float calculate_slope(float x1, float y1, float x2, float y2);
-std::vector<int> find_corners(const std::vector<float>& x, const std::vector<float>& y);
+float distanceFromPointToLine(const float& x, const float& y, const float& k, const float& b);
 int getFromCorner(const std::vector<float>& xData, const std::vector<float>& yData, std::vector<float>& nearCornerX, std::vector<float>& nearCornerY, int cornerIndex);
+
 
 template <typename T>
 std::vector<size_t> sort_indexes(std::vector<T> &v)
@@ -703,6 +705,7 @@ void processScanData(std::vector<float>&x, std::vector<float>&y){
     rightLineY.push_back(b);
     rightLineY.push_back(800*k+b);
     std::cout<<"ransac_right: "<<k<<" "<<b<<" "<<rightAngle<<std::endl;
+    std::cout<<"The distance to right is:" << std::setw(6) << distanceFromPointToLine(0, 0, k, b) << "mm" << std::endl; // 求点到right直线的距离
     fitLineRansacOrigin(frontPoints, frontLineParam, 2000, 5);
     k = frontLineParam[1] / frontLineParam[0];
     b = frontLineParam[3] - k*frontLineParam[2];
@@ -712,6 +715,7 @@ void processScanData(std::vector<float>&x, std::vector<float>&y){
     frontLineY.push_back(b);
     frontLineY.push_back(800*k+b);
     std::cout<<"ransac_front: "<<k<<" "<<b<<" "<<frontAngle<<std::endl;
+    std::cout<<"The distance to front is:" << std::setw(6) << distanceFromPointToLine(0, 0, k, b) << "mm"<< std::endl; // 求点到front直线的距离
 
     std::cout<< "The difference between the right and front angles is: " <<fabs(rightAngle - frontAngle) << std::endl;
 
@@ -882,6 +886,13 @@ int getFromCorner(const std::vector<float>& xData, const std::vector<float>& yDa
 
 }
 
+// 求点到直线的距离
+float distanceFromPointToLine(const float& x, const float& y, const float& k, const float& b)
+{
+    // y = kx + b  ----->    kx - y + b = 0
+
+    return fabs(k*x-y+b)/sqrt(pow(k, 2)+pow(1, 2));
+}
 
 int main(int argc, char *argv[])
 {
