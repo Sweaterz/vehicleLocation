@@ -22,14 +22,13 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 
-
-#include <iostream>
 #include <Eigen/Dense>
 #include <vector>
 #include <numeric>
 #include <cmath>
 #include <algorithm>
 #include <map>
+
 using namespace Eigen;
 
 
@@ -43,6 +42,7 @@ void filterPoints(const std::vector<float>& xData, const std::vector<float>& yDa
 void filterEdgePoints(const std::vector<float>& xData, const std::vector<float>& yData, std::vector<float>& filteredX, std::vector<float>& filteredY, size_t removeFront, size_t removeBack);
 float calculate_slope(float x1, float y1, float x2, float y2);
 std::vector<int> find_corners(const std::vector<float>& x, const std::vector<float>& y);
+int getFromCorner(const std::vector<float>& xData, const std::vector<float>& yData, std::vector<float>& nearCornerX, std::vector<float>& nearCornerY, int cornerIndex);
 
 template <typename T>
 std::vector<size_t> sort_indexes(std::vector<T> &v)
@@ -440,12 +440,12 @@ int findMaxDiffIndex(const std::vector<float>& diffs) {
 //}
 
 
-void fitLineRansac(const std::vector<cv::Point2f>& points,
-                   cv::Vec4f &line,
-                   int iterations = 1000,
-                   double sigma = 1.,
-                   double k_min = -7.,
-                   double k_max = 7.)
+void fitLineRansacOrigin(const std::vector<cv::Point2f>& points,
+                         cv::Vec4f &line,
+                         int iterations = 1000,
+                         double sigma = 1.,
+                         double k_min = -7.,
+                         double k_max = 7.)
 {
     unsigned int n = points.size();
 
@@ -485,6 +485,108 @@ void fitLineRansac(const std::vector<cv::Point2f>& points,
         if(score > bestScore)
         {
             line = cv::Vec4f(dp.x, dp.y, p1.x, p1.y);
+            bestScore = score;
+        }
+    }
+}
+
+void fitLineRansacOrigin2(const std::vector<cv::Point2f>& points,
+                          cv::Vec4f &line,
+                          int iterations = 1000,
+                          double sigma = 1.,
+                          double k_min = -100.,
+                          double k_max = 100.,
+                          double minDistance = 10.0)
+{
+    unsigned int n = points.size();
+
+    if(n<2)
+    {
+        return;
+    }
+
+    cv::RNG rng;
+    double bestScore = -1.;
+    for(int k=0; k<iterations; k++)
+    {
+        int i1=0, i2=0;
+        while(i1==i2)
+        {
+            i1 = rng(n);
+            i2 = rng(n);
+        }
+        const cv::Point2f& p1 = points[i1];
+        const cv::Point2f& p2 = points[i2];
+
+        // 检查点之间的距离
+        if(cv::norm(p1 - p2) < minDistance)
+            continue;
+
+        cv::Point2f dp = p2-p1;//直线的方向向量
+        dp *= 1./norm(dp);
+        double score = 0;
+
+        if(dp.y/dp.x<=k_max && dp.y/dp.x>=k_min )
+        {
+            for(int i=0; i<n; i++)
+            {
+                cv::Point2f v = points[i]-p1;
+                double d = v.y*dp.x - v.x*dp.y;//向量a与b叉乘/向量b的摸.||b||=1./norm(dp)
+                //score += exp(-0.5*d*d/(sigma*sigma));//误差定义方式的一种
+                if( fabs(d)<sigma )
+                    score += 1;
+            }
+        }
+        if(score > bestScore)
+        {
+            line = cv::Vec4f(dp.x, dp.y, p1.x, p1.y);
+            bestScore = score;
+        }
+    }
+}
+
+void fitLineRansac(const std::vector<cv::Point2f>& points,
+                   cv::Vec4f &line,
+                   int iterations = 1000,
+                   double sigma = 1.)
+{
+    unsigned int n = points.size();
+
+    if(n<2)
+    {
+        return;
+    }
+
+    cv::RNG rng;
+    double bestScore = -1.;
+    for(int k=0; k<iterations; k++)
+    {
+        int i1=0, i2=0;
+        while(i1==i2)
+        {
+            i1 = rng(n);
+            i2 = rng(n);
+        }
+        const cv::Point2f& p1 = points[i1];
+        const cv::Point2f& p2 = points[i2];
+
+        cv::Point2f d = p2 - p1; // 直线的方向向量
+        d *= 1. / norm(d);
+        double score = 0;
+
+        for(int i=0; i<n; i++)
+        {
+            cv::Point2f v = points[i] - p1;
+            double t = v.dot(d); // 参数 t
+            cv::Point2f projectedPoint = p1 + t * d; // 投影点
+            double dist = norm(points[i] - projectedPoint); // 点到直线的距离
+            if(dist < sigma)
+                score += 1;
+        }
+
+        if(score > bestScore)
+        {
+            line = cv::Vec4f(d.x, d.y, p1.x, p1.y);
             bestScore = score;
         }
     }
@@ -564,55 +666,56 @@ void processScanData(std::vector<float>&x, std::vector<float>&y){
 
     //     myPlt(x, y, "Horizontal laser orignal data");
 
-
-
-    plt::scatter(filtered_x, filtered_y, 1);
     std::vector<int>corners = find_corners(filtered_x, filtered_y);
-    sort(corners.begin(), corners.end());
-    reverse(corners.begin(), corners.end());
     std::vector<float>corners_x, corners_y;
     int cornerIndex = corners[0];
+    corners_x.push_back(filtered_x[cornerIndex]);
+    corners_y.push_back(filtered_y[cornerIndex]);
+    getFromCorner(filtered_x, filtered_y, filtered_x, filtered_y, cornerIndex); // get points near corner.
+    plt::scatter(filtered_x, filtered_y, 1);
+
     // for(int corner : corners)
     // {
     //     corners_x.push_back(filtered_x[corner]);
     //     corners_y.push_back(filtered_y[corner]);
     // }
-    corners_x.push_back(filtered_x[cornerIndex]);
-    corners_y.push_back(filtered_y[cornerIndex]);
-    std::vector<cv::Point2f> frontPoints, leftPoints;
+
+    std::vector<cv::Point2f> frontPoints, rightPoints;
     for(int i=0; i<filtered_x.size(); i++){
-        if(i <= cornerIndex){
-            leftPoints.push_back(cv::Point2f(filtered_x[i], filtered_y[i]));
+        if(i <= filtered_x.size()/2){
+            rightPoints.push_back(cv::Point2f(filtered_x[i], filtered_y[i]));
         }
         else{
             frontPoints.push_back(cv::Point2f(filtered_x[i], filtered_y[i]));
         }
     }
-    cv::Vec4f leftLineParam, frontLineParam;
-    std::vector<float> leftLineX, leftLineY, frontLineX, frontLineY;
+    cv::Vec4f rightLineParam, frontLineParam;
+    std::vector<float> rightLineX, rightLineY, frontLineX, frontLineY;
+    std::cout << "The right points size is : " << rightPoints.size() << std::endl;
 
-    fitLineRansac(leftPoints, leftLineParam, 2000, 10);
-    double k = leftLineParam[1] / leftLineParam[0];
-    double b = leftLineParam[3] - k*leftLineParam[2];
-    double leftAngle = atan(k) / 3.1415926 * 180;
-    leftLineX.push_back(filtered_x[0]);
-    leftLineX.push_back(filtered_x[cornerIndex]);
-    leftLineY.push_back(filtered_y[0]);
-    leftLineY.push_back(filtered_y[cornerIndex]);
-    std::cout<<"ransac_left: "<<k<<" "<<b<<" "<<leftAngle<<std::endl;
-    fitLineRansac(frontPoints, frontLineParam, 2000, 10);
+    std::cout << "The front points size is : " << frontPoints.size() << std::endl;
+    fitLineRansac(rightPoints, rightLineParam, 2000, 5);
+    double k = rightLineParam[1] / rightLineParam[0];
+    double b = rightLineParam[3] - k*rightLineParam[2];
+    double rightAngle = atan(k) / 3.1415926 * 180;
+    rightLineX.push_back(0);
+    rightLineX.push_back(800);
+    rightLineY.push_back(b);
+    rightLineY.push_back(800*k+b);
+    std::cout<<"ransac_right: "<<k<<" "<<b<<" "<<rightAngle<<std::endl;
+    fitLineRansacOrigin(frontPoints, frontLineParam, 2000, 5);
     k = frontLineParam[1] / frontLineParam[0];
     b = frontLineParam[3] - k*frontLineParam[2];
     double frontAngle = atan(k) / 3.1415926 * 180;
     frontLineX.push_back(0);
-    frontLineX.push_back(filtered_x[cornerIndex]);
+    frontLineX.push_back(800);
     frontLineY.push_back(b);
-    frontLineY.push_back(k*filtered_x[cornerIndex]+b);
+    frontLineY.push_back(800*k+b);
     std::cout<<"ransac_front: "<<k<<" "<<b<<" "<<frontAngle<<std::endl;
 
-    std::cout<< "The difference between the left and front angles is: " <<fabs(leftAngle - frontAngle) << std::endl;
+    std::cout<< "The difference between the right and front angles is: " <<fabs(rightAngle - frontAngle) << std::endl;
 
-    plt::plot(leftLineX, leftLineY, {{"color", "orange"}});
+    plt::plot(rightLineX, rightLineY, {{"color", "orange"}});
     plt::scatter(corners_x, corners_y, 100, { {"color", "red"}, {"marker", "o"} }); // 画出角点
     plt::plot(frontLineX, frontLineY, {{"color", "yellow"}});
     // plt::scatter(corners_x, corners_y, 1000, {{"color", "green"}, {"marker", "o"}, {"alpha", "0.5"}});
@@ -736,6 +839,10 @@ std::vector<int> find_corners(const std::vector<float>& x, const std::vector<flo
 
     // 找到斜率变化较大的点
     float threshold = 20; // 可以根据实际情况调整阈值
+    // float max = *std::max_element(slope_changes.begin(), slope_changes.end());
+    int maxIndex = std::distance(slope_changes.begin(), std::max_element(slope_changes.begin(), slope_changes.end()));
+    corners.push_back((maxIndex + 1) * step);
+
     for (size_t i = 0; i < slope_changes.size(); ++i) {
         // std::cout << slope_changes[i] << " ";
         if (slope_changes[i] > threshold) {
@@ -748,23 +855,31 @@ std::vector<int> find_corners(const std::vector<float>& x, const std::vector<flo
 }
 
 // 取角点附近的点，精确度更高
-int getFromCorners(const std::vector<float>& xData, const std::vector<float>& yData, std::vector<float>& nearCornerX, std::vector<float>& nearCornerY, int cornerIndex)
+int getFromCorner(const std::vector<float>& xData, const std::vector<float>& yData, std::vector<float>& nearCornerX, std::vector<float>& nearCornerY, int cornerIndex)
 {
-    int nearParam = 50; // 50 is the parameter controling about getting points range.
+    int nearParam = 500; // 50 is the parameter controling about getting points range.
+    std::vector<float> tmpX, tmpY;
+
     if(cornerIndex - nearParam < 0 || cornerIndex + nearParam >= xData.size())
     {
         std::cerr << "There is no enough points near the corner point. Now param is " << nearParam << ", please check it." << std::endl;
-        return 0;
+        nearParam = fmin(cornerIndex, xData.size()-cornerIndex);
+        std::cout << "The near param updates to " << nearParam << ". Please notice it." << std::endl;
+        // return 0;
     }
-    else
+
+    for(int i = cornerIndex-nearParam; i < cornerIndex + nearParam; i++)
     {
-        for(int i = cornerIndex-50; i < cornerIndex + 50; i++)
-        {
-            nearCornerX.push_back(xData[i]);
-            nearCornerY.push_back(yData[i]);
-        }
-        return 1;
+        tmpX.push_back(xData[i]);
+        tmpY.push_back(yData[i]);
     }
+    nearCornerX.clear();
+    nearCornerY.clear();
+    nearCornerX = tmpX;
+    nearCornerY = tmpY;
+    std::cout << "nearCornerX size : " << nearCornerX.size() << " nearCornerY size : " << nearCornerY.size() << std::endl;
+    return 1;
+
 }
 
 
