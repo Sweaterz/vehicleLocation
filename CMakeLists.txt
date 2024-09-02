@@ -9,8 +9,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_PREFIX_PATH "/usr/lib/x86_64-linux-gnu/")
 
-find_package(Qt5Core)
-
+# find_package(Qt5Core)
+find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 # 检查是否找到 Qt5Core
 if(Qt5Core_FOUND)
     message(STATUS "Found Qt5Core")
@@ -55,7 +55,9 @@ endif()
 
 add_executable(${PROJECT_NAME} "main.cpp")
 
-target_link_libraries(${PROJECT_NAME} Qt5::Core)
+# target_link_libraries(${PROJECT_NAME} Qt5::Core)
+target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Gui Qt5::Widgets)
+
 target_include_directories(${PROJECT_NAME} PRIVATE ${Python3_INCLUDE_DIRS} ${Python3_NumPy_INCLUDE_DIRS} ${OpenCV_LIBS})
 target_link_libraries(${PROJECT_NAME} Python3::Python Python3::NumPy pthread)
 target_link_libraries(${PROJECT_NAME} Eigen3::Eigen)

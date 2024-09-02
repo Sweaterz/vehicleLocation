@@ -1,7 +1,7 @@
 ﻿#include "matplotlibcpp.h"
 #include <QCoreApplication>
-// #include <QApplication>
-// #include <QWidget>
+#include <QApplication>
+#include <QWidget>
 
 #include <iostream>
 #include <sys/socket.h>
@@ -194,7 +194,7 @@ void parseHorizontalScanData(std::vector<std::string> &hex_data, int &scan_idx)
             }
 
         }
-        std::cout << "firstStartAngle:" << firstStartAngle << std::endl;
+        // std::cout << "firstStartAngle:" << firstStartAngle << std::endl;
         if(firstStartAngle == 336){
             std::vector<float> x(xData.size());
             std::vector<float> y(xData.size());
@@ -208,6 +208,8 @@ void parseHorizontalScanData(std::vector<std::string> &hex_data, int &scan_idx)
             //            if(scan_idx == PROCESSIDX){
             //                processScanData(x, y);
             //            }
+            // processScanData(x, y);
+
             processScanData2(x, y);
 
 
@@ -291,7 +293,7 @@ int getUDPData()
     }
     // 设置地址与端口
     sockaddr_in g_LocalAddr;
-    socklen_t  addr_len = sizeof(g_LocalAddr);
+    socklen_t addr_len = sizeof(g_LocalAddr);
 
     memset(&g_LocalAddr, 0, sizeof(g_LocalAddr));
 
@@ -341,7 +343,7 @@ int getUDPData()
             float time = (float)std::chrono::duration_cast<std::chrono::microseconds>(end - old_end).count() / 1000;
             old_end = end;
             if(hex_str.size() > 0){
-                std::cout<<"scanData Size: "<<hex_str.size()<<std::endl;
+                // std::cout<<"scanData Size: "<<hex_str.size()<<std::endl;
                 parseHorizontalScanData(hex_str, scan_idx);
             }
         }
@@ -738,14 +740,13 @@ void processScanData(std::vector<float>&x, std::vector<float>&y){
     // plt::scatter(filtered_x2, filtered_y2);
     // plt::plot();
     plt::title("x size: " + std::to_string(x.size()) + " y size: " + std::to_string(y.size()));
-    plt::xlim(0, 1500);
+    plt::xlim(-1000, 1000);
     plt::ylim(0, 1500);
     plt::title("right distance:" + std::to_string(distanceToRight) + " front distance:" + std::to_string(distanceToFront) );
     plt::pause(0.03);
 
     //  plt::plot();
     //  plt::show();
-    std::cout << "333333333333333333333333" << std::endl;
 }
 
 // 2用于左侧雷达的数据处理
@@ -760,68 +761,7 @@ void processScanData2(std::vector<float>&x, std::vector<float>&y){
     filterPoints(x, y, filtered_x, filtered_y, 10); // 过滤噪声点距离单位10mm以外的点
     // 过滤边缘点
     // filterEdgePoints(x, y, filtered_x2, filtered_y2, 20, 20);
-    /*
-    std::vector<float> differences = computeDifferences(y);
-    int splitIndex = findMaxDiffIndex(differences) + 5;
-    std::vector<double>x_, y_;
-    double x_index = x[splitIndex];
-    double y_index = y[splitIndex];
-    x_.push_back(x_index);
-    y_.push_back(y_index);
 
-
-    std::vector<cv::Point2f> points1, points2;
-    std::vector<float> x1, y1, x2, y2;
-    for(int i=0; i<x.size(); i++){
-        if(x[i] > 0 &&  y[i] < 500 && y[i] > 200){
-            points1.push_back(cv::Point2f(y[i], x[i]));
-            x1.push_back(y[i]);
-            y1.push_back(x[i]);
-        }
-        else if ( x[i] > -500 && x[i] < 0) {
-            points2.push_back(cv::Point2f(x[i], y[i]));
-            x2.push_back(x[i]);
-            y2.push_back(y[i]);
-        }
-    }
-    {
-        cv::Vec4f lineParam;
-        fitLineRansac(points1,lineParam,2000,10);
-        double k = lineParam[1] / lineParam[0];
-        double b = lineParam[3] - k*lineParam[2];
-
-        std::cout<<"ransac_p1: "<<k<<" "<<b<<" "<<atan(k) / 3.1415926 * 360<<std::endl;
-    }
-    {
-        //        cv::Vec4f lineParam;
-        //        cv::fitLine(points1,lineParam,cv::DIST_L1,0,0.01,0.01);
-        //        double k = lineParam[1] / lineParam[0];
-        //        double b = lineParam[3] - k*lineParam[2];
-        //        std::cout<<k<<" "<<b<<" "<<atan(k) / 3.1415926 * 360<<std::endl;
-        //        auto k = linearRegression(x1, y1);
-        //        std::cout<<"my_p1: "<<k<<" "<<atan(k) / 3.1415926 * 360<<std::endl;
-
-
-    }
-
-    {
-        cv::Vec4f lineParam;
-        fitLineRansac(points2,lineParam,2000,10);
-        double k = lineParam[1] / lineParam[0];
-        double b = lineParam[3] - k*lineParam[2];
-
-        std::cout<<"ransac_p2: "<<k<<" "<<b<<" "<<atan(k) / 3.1415926 * 360<<std::endl;
-    }
-    {
-        //        cv::Vec4f lineParam;
-        //        cv::fitLine(points2,lineParam,cv::DIST_L2,0,0.01,0.01);
-        //        double k = lineParam[1] / lineParam[0];
-        //        double b = lineParam[3] - k*lineParam[2];
-        //        std::cout<<k<<" "<<b<<" "<<" "<<atan(k) / 3.1415926 * 360<<std::endl;
-        //        auto k = linearRegression(x2, y2);
-        //        std::cout<<"my_p2: "<<k<<" "<<atan(k) / 3.1415926 * 360<<std::endl;
-    }
-    */
     //     myPlt(x, y, "Horizontal laser orignal data");
 
     std::vector<int>corners = find_corners(filtered_x, filtered_y);
@@ -857,9 +797,9 @@ void processScanData2(std::vector<float>&x, std::vector<float>&y){
     double b = frontLineParam[3] - k*frontLineParam[2];
     double frontAngle = atan(k) / 3.1415926 * 180;
     frontLineX.push_back(0);
-    frontLineX.push_back(1500);
+    frontLineX.push_back(-1500);
     frontLineY.push_back(b);
-    frontLineY.push_back(1500*k+b);
+    frontLineY.push_back(-1500*k+b);
     std::cout<<"ransac_front: "<<k<<" "<<b<<" "<<frontAngle<<std::endl;
     float distanceToFront = distanceFromPointToLine(0, 0, k, b);
 
@@ -869,9 +809,9 @@ void processScanData2(std::vector<float>&x, std::vector<float>&y){
     b = leftLineParam[3] - k*leftLineParam[2];
     double leftAngle = atan(k) / 3.1415926 * 180;
     leftLineX.push_back(0);
-    leftLineX.push_back(1500);
+    leftLineX.push_back(-1500);
     leftLineY.push_back(b);
-    leftLineY.push_back(1500*k+b);
+    leftLineY.push_back(-1500*k+b);
     std::cout<<"ransac_left: "<<k<<" "<<b<<" "<<leftAngle<<std::endl;
     float distanceToLeft = distanceFromPointToLine(0, 0, k, b);
     std::cout<<"The distance to left is:" << std::setw(6) << distanceToLeft << "mm"<< std::endl; // 求点到front直线的距离
@@ -882,18 +822,8 @@ void processScanData2(std::vector<float>&x, std::vector<float>&y){
     plt::scatter(corners_x, corners_y, 100, { {"color", "red"}, {"marker", "o"} }); // 画出角点
     plt::plot(frontLineX, frontLineY, {{"color", "green"}}); // 画出前面的拟合直线
 
-    // plt::scatter(corners_x, corners_y, 1000, {{"color", "green"}, {"marker", "o"}, {"alpha", "0.5"}});
-
-    // plt::scatter(x_, y_, 100, {{"color", "red"}, {"marker", "o"}, {"linestyle", "--"}});
-    // plt::pause(0.1);
-    // plt::clf();
-    // plt::scatter(filtered_x, filtered_y);
-    // plt::pause(0.1);
-    // plt::clf();
-    // plt::scatter(filtered_x2, filtered_y2);
-    // plt::plot();
     plt::title("x size: " + std::to_string(x.size()) + " y size: " + std::to_string(y.size()));
-    plt::xlim(0, 1500);
+    plt::xlim(-1000, 1000);
     plt::ylim(0, 1500);
     plt::title("front distance:" + std::to_string(distanceToFront) + " left distance:" + std::to_string(distanceToLeft) );
     plt::pause(0.03);
@@ -939,9 +869,9 @@ void filterPoints(const std::vector<float>& xData, const std::vector<float>& yDa
             filteredY.push_back(y);
         }
         else {
-
+            // 画出过滤掉的点
             plt::scatter(std::vector<float>{x}, std::vector<float>{y}, 100);
-            plt::xlim(0, 1500);
+            plt::xlim(-1000, 1000);
             plt::ylim(0, 1500);
             // plt::pause(0.1);
         }
@@ -1057,7 +987,7 @@ float distanceFromPointToLine(const float& x, const float& y, const float& k, co
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
+    QApplication a(argc, argv);
     std::string path = "/home/zhy/文档/270mini数据/20240416135731.dat";  //7/8/9  19 22 23
     //    int ret = readofflineDatByHex(path);
     getUDPData();
